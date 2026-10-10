@@ -4,16 +4,19 @@ from pydantic import BaseModel
 import joblib
 
 app = FastAPI()
-@app.get("/")
-async def root():
-    return {"message": "Pro Urdu AI Backend is Running! Go to /docs to test the model."}
+
+# CORS must be configured to allow external websites (like Vercel)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"], 
+    allow_origins=["*"],  # Changed from localhost to allow all origins
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.get("/")
+async def root():
+    return {"message": "Pro Urdu AI Backend is Running! Go to /docs to test the model."}
 
 print("Loading Production NLP models (26k dataset)...")
 model = joblib.load('production_urdu_model.pkl')
